@@ -302,6 +302,41 @@ class CustomTransformerRecommender(TransformerRecommender):
 - **Recommended**: 8GB RAM, GPU with 4GB VRAM
 - **Large Scale**: 16GB+ RAM, GPU with 8GB+ VRAM
 
+## 📚 **Complete Documentation**
+
+This repository includes comprehensive documentation covering theory, implementation, and benchmarking:
+
+### 📄 **Research Papers & Analysis**
+- **[📖 TransformerRecommender Paper](docs/TransformerRecommender_Paper.md)** - Complete academic paper documenting the project, results (5.05% HR@10), and methodology analysis
+- **[🏆 SOTA Benchmark Comparison](docs/sota_for_amazon_beauty.md)** - Comprehensive comparison with published results on Amazon Beauty dataset, including evaluation methodology impact analysis
+
+### 🧮 **Mathematical Foundations**
+- **[📐 Mathematical Formulation](docs/TransformersAndMath.md)** - Complete mathematical formulation of Transformer attention mechanisms with equations and explanations
+- **[🎓 Theoretical Guarantees](docs/transformers_theory.md)** - Mathematical guarantees for Transformer architectures including universal approximation and generalization bounds
+
+### 🚀 **Production & Deployment**
+- **[🏗️ Deployment Framework Comparison](docs/deploying.md)** - Comprehensive comparison of 6 model serving frameworks (LitServe, MOSEC, MLServer, NVIDIA Triton, Ray Serve, MLflow)
+
+### 📊 **Benchmark Results & Analysis**
+- **[🎯 Evaluation Methodology Impact](benchmark_results/methodology_impact.txt)** - Demonstrates 847% performance difference between evaluation protocols (4.84% → 45.85% HR@10)
+- **[🔬 Benchmark System Documentation](BENCHMARK_README.md)** - Complete guide to the comprehensive evaluation system with multiple protocols
+
+### 🛠️ **LaTeX Sources** (for academic use)
+- **[TransformersAndMath.tex](docs/TransformersAndMath.tex)** - LaTeX source for mathematical formulations
+- **[transformers_theory.tex](docs/transformers_theory.tex)** - LaTeX source for theoretical foundations  
+- **[sota_for_amazon_beauty.tex](docs/sota_for_amazon_beauty.tex)** - LaTeX source for benchmark comparison
+- **[deploying.tex](docs/deploying.tex)** - LaTeX source for deployment comparison
+- **[TransformerRecommender_Paper.tex](docs/TransformerRecommender_Paper.tex)** - LaTeX source for research paper
+
+### 💡 **Key Documentation Highlights**
+- ✅ **Complete mathematical foundations** with formal proofs and guarantees
+- ✅ **Comprehensive benchmark analysis** showing competitive performance
+- ✅ **Production deployment guidance** for real-world applications
+- ✅ **Evaluation methodology impact** - explains why our conservative scores are realistic
+- ✅ **Both Markdown and LaTeX formats** for maximum accessibility
+
+**📖 Start with the [Research Paper](docs/TransformerRecommender_Paper.md) for a complete overview!**
+
 ## 📝 License
 
 This project is open source and available under the MIT License.
