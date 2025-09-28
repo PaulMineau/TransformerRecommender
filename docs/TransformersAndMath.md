@@ -7,7 +7,7 @@
 Transformer attention uses queries, keys, and values to compute weighted sums of values. Given an input sequence of $N$ tokens represented by row vectors in a matrix $X\in\mathbb{R}^{N\times d_{\text{model}}}$, we first project $X$ into query, key, and value spaces by learned matrices. Concretely, for one attention head we use weight matrices $W^Q,W^K\in\mathbb{R}^{d_{\text{model}}\times d_k}$ and $W^V\in\mathbb{R}^{d_{\text{model}}\times d_v}$ to form:
 
 - $Q = XW^Q \in \mathbb{R}^{N\times d_k}$ (queries)
-- $K = XW^K \in \mathbb{R}^{N\times d_k}$ (keys)
+- $K = XW^K \in \mathbb{R}^{N\times d_k}$ (keys)  
 - $V = XW^V \in \mathbb{R}^{N\times d_v}$ (values)
 
 Each row $q_i$ of $Q$ is the query vector for token $i$, each row $k_j$ of $K$ is a key vector for token $j$, and each row $v_j$ of $V$ is a value vector for token $j$. Intuitively, each query $q_i$ "asks" how much attention to pay to each key $k_j$, and these attention weights are used to form a weighted sum of the corresponding values $v_j$. This projection step is summarized by Jurafsky & Martin (2025):
@@ -66,9 +66,9 @@ More explicitly, for each query vector $q_i$ (row $i$ of $Q$) the attention weig
 
 $$\alpha_{ij} = \frac{\exp\left(q_i\cdot k_j/\sqrt{d_k}\right)}{\sum_{j'=1}^N \exp\left(q_i\cdot k_{j'}/\sqrt{d_k}\right)}$$
 
-Then the output for query $i$ is:
+Then the output for query $i$ is 
 
-$$o_i = \sum_{j=1}^N \alpha_{ij}\,v_j$$
+$$o_i = \sum_{j=1}^N \alpha_{ij}\,v_j$$ 
 
 In matrix form this is exactly the $i$th row of $AV$. Thus the attention weight matrix $A=\text{softmax}(QK^\top/\sqrt{d_k})$ has entries $A_{ij}=\alpha_{ij}$. In summary:
 
@@ -96,17 +96,13 @@ The Transformer improves representational power by using multi-head attention. I
 - Compute head-specific queries/keys/values: $Q_i = XW_i^Q$, $K_i = XW_i^K$, $V_i = XW_i^V$, each of size $N\times d_k$ (for $Q_i,K_i$) and $N\times d_v$ (for $V_i$).
 
 - Each head $i$ independently performs scaled dot-product attention:
-  
   $$\text{head}_i = \text{Attention}(Q_i,K_i,V_i) = \text{softmax}\left(\frac{Q_iK_i^\top}{\sqrt{d_k}}\right)V_i$$
-  
   This yields $h$ output matrices $\text{head}_i\in\mathbb{R}^{N\times d_v}$.
 
 - Concatenate the heads along the feature dimension: 
-  
   $$H = [\text{head}_1;\,\dots;\,\text{head}_h] \in\mathbb{R}^{N\times (h\,d_v)}$$
 
 - Apply a final linear projection $W^O\in\mathbb{R}^{(h\,d_v)\times d_{\text{model}}}$ to combine heads:
-  
   $$\text{MultiHead}(X) = HW^O \in \mathbb{R}^{N\times d_{\text{model}}}$$
 
 Jurafsky & Martin summarize this as: "we linearly project the queries, keys and values $h$ times with different learned projections... perform the attention function in parallel... concatenate and once again project, resulting in the final values". In formula form, Vaswani et al. give:

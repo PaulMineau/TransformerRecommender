@@ -24,9 +24,7 @@ Transformers are universal approximators of continuous permutation-equivariant s
 - The proofs assume sufficient width, depth, and precision in parameters.
 - Some variants of positional encoding (in particular certain *relative* encodings inside softmax) may break universality in practice (see e.g. Luo et al. 2022).
 
-This result is discussed in detail in "Are Transformers Universal Approximators …"
-Sparse-attention variants are also shown to preserve universality under certain sparsity patterns (so long as connectivity suffices)
-Takakura et al. (2023) also analyze approximation + estimation error in smoother function classes under dimension constraints.
+This result is discussed in detail in "Are Transformers Universal Approximators …". Sparse-attention variants are also shown to preserve universality under certain sparsity patterns (so long as connectivity suffices). Takakura et al. (2023) also analyze approximation + estimation error in smoother function classes under dimension constraints.
 
 ## Algorithmic / Computational Expressivity
 
@@ -88,7 +86,6 @@ When applying these theoretical results to a recommender-system transformer (e.g
 
 These mathematical results don't guarantee that *your training pipeline* will work perfectly, but they give a structured theoretical lens:
 (1) Transformers are expressive, (2) they can implement interesting algorithms, and (3) under norm / structural constraints they generalize.
-You can include this PDF in your project's documentation as a reference for readers, collaborators, or reviewers.
 
 ## References
 
