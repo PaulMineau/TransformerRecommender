@@ -157,14 +157,14 @@ config = {
 
 ### Our Enhanced Transformer (50 epochs):
 - **Hit Rate @10**: **5.05%** ⭐ **NEW RECORD**
-- **NDCG @10**: **2.48%** ⭐ **NEW RECORD** 
+- **NDCG @10**: **0.0248 (2.48%)** ⭐ **NEW RECORD** 
 - **Training Time**: 85 minutes (25 epochs with early stopping)
 
 ### Performance vs. Published Benchmarks:
 
 | Model | Hit Rate @10 | NDCG @10 | Improvement |
 |-------|-------------|----------|-------------|
-| **🏆 Our Enhanced Transformer** | **5.05%** | **2.48%** | **BASELINE** |
+| **🏆 Our Enhanced Transformer** | **5.05%** | **0.0248 (2.48%)** | **BASELINE** |
 | SASRec (Adaptive w/ mixed) | 2.33% | 1.15% | **+117%** ✅ |
 | SASRec (Adaptive) | 1.64% | 0.78% | **+208%** ✅ |
 | SASRec (Random) | 1.44% | 0.70% | **+251%** ✅ |
