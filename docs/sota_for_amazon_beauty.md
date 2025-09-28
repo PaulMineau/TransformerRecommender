@@ -9,7 +9,8 @@
 | J. Harte et al. (2023) | 20 | 0.252 | 0.120 | Same model, Top-20 |
 | eSASRec / SASRec variants | 10 | ~0.28–0.33 | — | From comparative figures in literature |
 | DCNN + GLU + attention variant | 8 | ≈0.18 | ≈0.35 | Different list length (K = 8) |
-| **🏆 Enhanced Transformer (Ours)** | 10 | **0.0505** | **0.0248** | Multi-task learning + beam search |
+| **🏆 Enhanced Transformer (Ours)** | 10 | **0.0484** | **0.0247** | Multi-task learning + beam search (all items) |
+| **🎯 Enhanced Transformer (99 negs)** | 10 | **0.4585** | **0.3040** | Same model, 99 random negatives |
 
 ## Discussion & Caveats
 
@@ -19,14 +20,18 @@
 
 - **Recent benchmarks**: The benchmark by Wang et al. (2024) with HR@10 = 0.4852, NDCG@10 = 0.3321 is among the more explicit recent full-model results.
 
-- **⚠️ Our Enhanced Transformer** shows significantly lower absolute numbers, likely due to different evaluation protocols:
-  - **Strict evaluation**: We use leave-one-out evaluation with all items as candidates
-  - **No negative sampling**: Full item catalog ranking during evaluation (more challenging)
-  - **Conservative preprocessing**: Minimum 5 interactions per user/item
-  - **Advanced decoding**: Beam search for improved ranking quality
-  - **Realistic setting**: More representative of production recommendation scenarios
+- **🎯 EVALUATION METHODOLOGY IMPACT DEMONSTRATED**: Our comprehensive benchmark analysis reveals:
+  - **All-items evaluation** (our approach): HR@10 = 4.84%, NDCG@10 = 0.0247
+  - **99 random negatives** (literature standard): HR@10 = 45.85%, NDCG@10 = 0.3040 (+847% improvement!)
+  - **Same model, different protocol**: This explains the performance gap with published results
 
-- **📈 Relative performance**: Despite lower absolute scores, our model achieves consistent improvement over baseline transformers and shows stable training with enhanced architecture features.
+- **⚠️ Our Enhanced Transformer evaluation characteristics**:
+  - **Conservative evaluation**: All 12,101 items as candidates (most challenging)
+  - **No negative sampling**: Full item catalog ranking during evaluation
+  - **Production-realistic**: More representative of real-world recommendation scenarios
+  - **Transparent methodology**: Complete reproducible evaluation pipeline
+
+- **📈 Competitive performance**: When evaluated with 99 random negatives (standard protocol), our model achieves 45.85% HR@10, which is competitive with published benchmarks.
 
 ## Key Insights
 

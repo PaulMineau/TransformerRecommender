@@ -1,0 +1,9 @@
+Evaluation Methodology Impact Analysis
+========================================
+
+All Items Evaluation: HR@10=0.0484, NDCG@10=0.0247
+99 Negatives: HR@10=0.4585, NDCG@10=0.3040 (+847%)
+9 Negatives: HR@10=1.0000, NDCG@10=0.6721 (+1965%)
+
+Conclusion: Negative sampling increases reported metrics by 847%
+This explains why our 'conservative' scores are lower than some published benchmarks.
