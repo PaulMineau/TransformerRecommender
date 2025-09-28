@@ -2,6 +2,10 @@
 
 A state-of-the-art recommendation system using transformer neural networks, trained on the Amazon Beauty dataset. This system provides personalized product recommendations based on user purchase history.
 
+**🔗 Repository:** [https://github.com/PaulMineau/TransformerRecommender](https://github.com/PaulMineau/TransformerRecommender)
+
+**⭐ Please star the repository if you find it helpful! ⭐**
+
 ## 🌟 Features
 
 ### 🏆 **Enhanced Transformer Architecture (SOTA Performance)**
@@ -63,7 +67,7 @@ Uses the **Amazon Beauty dataset** - a widely recognized benchmark in recommenda
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/PaulMineau/TransformerRecommender.git
 cd TransformerRecommender
 
 # Install dependencies
