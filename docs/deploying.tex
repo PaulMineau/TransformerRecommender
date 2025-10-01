@@ -1,0 +1,78 @@
+\section{Introduction}
+
+Serving trained PyTorch models in production requires robust inference frameworks. In practice, many model-serving tools have been developed, each with different design trade-offs. This report compares six such frameworks—LitServe \cite{litserve}, MOSEC \cite{mosec}, MLServer \cite{mlserver}, NVIDIA Triton Inference Server \cite{triton}, Ray Serve \cite{ray}, and MLflow \cite{mlflow}—focusing on key features relevant to PyTorch deployment. In particular, we examine their support for CPU and GPU execution, ability to serve multiple models (and related caching), integration with manifest or configuration files, and built-in security or authentication mechanisms. The goal is a comprehensive, side-by-side comparison to guide deployment choices in different environments.
+
+\section{Feature Comparison}
+
+\subsection{CPU/GPU Support}
+
+All six frameworks support CPU-only inference. GPU acceleration is available in most, though the level of support varies. NVIDIA Triton explicitly supports both GPU and CPU-only modes \cite{triton}, allowing models to run on multiple GPUs concurrently for high throughput. LitServe supports GPU inference with auto-scaling across multiple GPUs \cite{litserve}. MOSEC allows pipelined stages to utilize CPU and GPU devices in the same service \cite{mosec}, enabling mixed CPU/GPU workloads. Ray Serve can schedule model replicas on GPUs (including fractional GPUs) using Ray’s resource management and autoscaling \cite{ray}. MLServer (the Python-based Seldon inference server) can leverage GPUs through its inference runtimes (for example, using a PyTorch runtime when available) \cite{mlserver}. MLflow’s serving (the mlflow models serve command) is framework-agnostic: if the logged PyTorch model uses GPU tensors, it will use GPUs, but MLflow itself does not provide specialized GPU orchestration beyond the model code \cite{mlflow}.
+
+\subsection{Multi-Model Support and Caching}
+
+Multi-model serving allows a single server process to host multiple models simultaneously. LitServe is designed for compound pipelines and explicitly supports serving multiple models in one server
+github.com
+\cite{litserve}. MOSEC offers a “multiple route” service mode to serve multiple model endpoints under one service 
+github.com
+\cite{mosec}. MLServer was built with multi-model serving in mind: it can load multiple models in the same process and parallelize inference across them
+docs.seldon.ai
+\cite{mlserver}. NVIDIA Triton can concurrently perform inference on multiple models using the same GPU and supports having many models in its model repository
+docs.nvidia.com
+\cite{triton}. Ray Serve naturally supports multiple models via its deployment graph: one can deploy different models as separate Serve deployments or compose them into a single inference pipeline
+docs.ray.io
+\cite{ray}. In contrast, MLflow’s built-in model serving focuses on a single model at a time; serving multiple models typically requires running multiple instances of the server.
+
+Regarding caching, LitServe provides mechanisms to cache intermediate results or use model warmup examples as static inputs, giving the developer explicit control over caching behavior
+github.com
+\cite{litserve}. Ray Serve can take advantage of Ray’s in-memory object store to cache inputs or outputs across requests, though it has no dedicated caching feature for model weights. Triton, MLServer, and MOSEC emphasize dynamic batching and pipelining for throughput rather than explicit caching of model outputs.
+
+\subsection{Manifest and Configuration Integration}
+
+Frameworks differ in how models are configured and loaded. Triton uses a model repository structure: each model has a directory containing the model files and a config.pbtxt manifest (a Protocol Buffer text file) that specifies the model’s inputs, outputs, max batch size, and other settings
+docs.nvidia.com
+\cite{triton}. MLflow uses an MLmodel YAML file in each model directory as a manifest to list the model flavors (e.g. python_function, pytorch) and their configuration
+mlflow.org
+\cite{mlflow}. MLServer is often deployed via Kubernetes InferenceService (KServe) manifests: the InferenceService YAML references an MLServer runtime that loads the model from a storage URI. In this way, model configuration is handled through standard Kubernetes CRDs
+docs.seldon.ai
+\cite{mlserver}. In contrast, LitServe, MOSEC, and Ray Serve rely on Python code or simple CLI commands for deployment; they do not use an external manifest file format. Models and routes are defined programmatically (or via config objects) rather than via a static manifest.
+
+\subsection{Security and Authentication}
+
+Out-of-the-box security features also vary. Triton includes support for secure deployment: it can be configured with TLS/SSL for gRPC or HTTP endpoints, and its command-line options allow enabling SSL authentication for gRPC requests
+docs.nvidia.com
+\cite{triton}. Triton also recommends best practices like running as non-root and restricting model repository updates. Ray Serve itself is a library running on a Ray cluster; it inherits the cluster’s security setup. In managed environments (such as Anyscale), Ray Serve can be used with mTLS, RBAC, and monitoring, providing “robust ... security features” in production deployments
+docs.ray.io
+\cite{ray}. By default, self-hosted LitServe and MOSEC have no built-in authentication: LitServe’s self-managed mode leaves authentication to the user (the managed Lightning platform adds token/password options)
+github.com
+\cite{litserve}. MLServer similarly does not include its own auth mechanism, assuming it will be placed behind a secure gateway or used within a Kubernetes cluster with its own ingress security. MLflow’s open-source serve is very basic (no auth), although in production (e.g. Databricks Model Serving) one can enforce tokens and SSL at the service layer.
+
+\section{Summary Table}
+
+\begin{tabularx}{\linewidth}{l c c c c c}
+\hline
+\textbf{Framework} & \textbf{CPU} & \textbf{GPU} & \textbf{Multi-Model} & \textbf{Manifest} & \textbf{Security} \
+\hline
+LitServe & Yes & Yes (multi-GPU autoscale) & Yes (compound pipelines) & No & None (DIY) \
+MOSEC & Yes & Yes (CPU/GPU pipelining) & Yes (multiple routes) & No & None \
+MLServer & Yes & Yes (via runtimes) & Yes & Yes (KServe/JSON) & None \
+Triton & Yes & Yes (multi-GPU, batching) & Yes & Yes (config.pbtxt) & TLS/SSL support \
+Ray Serve & Yes & Yes (fractional GPU) & Yes & No & Cluster-level (TLS/RBAC) \
+MLflow & Yes & Yes (depends on model) & No & Yes (MLmodel) & Basic (token/SSL) \
+\hline
+\end{tabularx}
+
+\section{Conclusion}
+
+In summary, all surveyed frameworks can serve PyTorch models on CPU or GPU, but differ in specialization. Triton excels at high-throughput GPU serving with rich configuration and optional TLS security. LitServe and MOSEC focus on ease of use and flexibility, allowing multi-model pipelines and autoscaling (especially LitServe on GPUs). MLServer offers Kubernetes-native multi-model serving aligned with Seldon/KServe. Ray Serve provides a highly scalable, Python-native approach with dynamic batching and integration into Ray clusters. MLflow’s serving is simplest and is suited for single-model endpoints packaged with an MLmodel. The choice depends on needs: e.g., for strict security and GPU performance, Triton may be best; for flexible Python pipelines, LitServe or Ray Serve; for Kubernetes/MLflow integration, MLServer or MLflow serving. Each framework’s documentation contains further details for production deployment
+github.com
+docs.nvidia.com
+.
+
+\begin{thebibliography}{6}
+\bibitem{litserve}Lightning AI, LitServe Documentation, lightning.ai (2023).
+\bibitem{mosec}K.~Yang, Z.~Liu, P.~Cheng, MOSEC: Model Serving made Efficient in the Cloud, 2021. (GitHub)
+\bibitem{mlserver}Seldon Technologies, MLServer Documentation, seldon.io (2024).
+\bibitem{triton}NVIDIA, Triton Inference Server User Guide, docs.nvidia.com (2024).
+\bibitem{ray}Ray Project, Ray Serve Documentation, ray.io (2024).
+\bibitem{mlflow}Databricks, MLflow Models Documentation, mlflow.org (2024).
+\end{thebibliography}
